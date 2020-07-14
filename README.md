@@ -1,13 +1,8 @@
-# Exercício-Programa 1 da matéria de Métodos Numéricos e Aplicações (MAP3121)
+# Exercício-Programa 2 da matéria de Métodos Numéricos e Aplicações (MAP3121)
 Feito por João Rodrigo Olenscki e Luca Rodrigues Miguel
 
-## Ideia central do EP1
-A ideia central deste EP1 é utilizar métodos numéricos para a integração da equação do calor a 
-fim de analisar a mesma em uma barra unidimensional de comprimento L = 1 durante um intervalo de
-tempo indo de 0 a T = 1. O enunciado completo do EP encontra-se na pasta 'docs' deste repositório.<br/>
-Nesta mesma pasta de documentos encontra-se o relatório elaborado para a resolução do problema, contendo
-análises preliminares do problema, desenvolvimento matemático das ferramentas utilizadas e uma análise 
-detalhada dos resultados, com a variação de métodos e parâmetros para cada função.
+## Ideia central do EP2
+A ideia central deste EP2 é resolver o problema inverso da transmissão de calor numa barra unidimensional a partir de uma lista de posições de forçantes (bem como as equações que regem-nas) e a distribuição de temperaturas na barra no instante T = 1. O objetivo é encontrar a intensidade (ou multiplicador) que cada fonte de calor possui, bem como analisar o erro quadrático entre a solução encontrada e a distribuição dada.
 
 ## Bibliotecas utilizadas
 - matplotlib (para plotar os gráficos)
@@ -17,3 +12,4 @@ detalhada dos resultados, com a variação de métodos e parâmetros para cada f
 - time
 - datetime
 - math
+- typing
