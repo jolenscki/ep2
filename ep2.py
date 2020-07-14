@@ -34,13 +34,18 @@ plt.rcParams.update(params)
 
 DPI = 150 # qualidade da imagem de output
 
-def create_folder(folder_list: list, path: str = os.getcwd()) -> str:
+def create_folder(
+            folder_list: list, 
+            path: str = os.getcwd()
+            ) -> str:
     '''
     funcao que cria pastas em um certo diretório
     @parameters:
-    - folder_list: cada elemento e uma string contendo o nome da pasta a ser criada
+    - folder_list: cada elemento e uma string contendo o nome da pasta
+                   a ser criada
     - path: caminho absoluto anterior as pastas a serem criadas
-    -- default_value: os.getcwd(), caminho até a pasta onde o programa está rodando
+    -- default_value: os.getcwd(), caminho até a pasta onde o programa 
+                      esta rodando
     @output:
     - new_dir: caminho ate o ultimo diretorio criado
     '''
@@ -77,8 +82,12 @@ def open_test_file(filename: str = 'test.txt') -> Tuple[list, np.ndarray]:
     return p_list, u_t
 
 def plot_solution(
-                  N: int, output_dic: Dict, test_name: str = 'c', 
-                  path: str = os.getcwd(), save: bool = True) -> None:
+            N: int, 
+            output_dic: Dict, 
+            test_name: str='c', 
+            path: str=os.getcwd(), 
+            save: bool=True
+            ) -> None:
     '''
     funcao que plota as solucoes exata (retirada do arquivo .txt) e 
     aproximada (calculada pelo metodo dos minimos quadrados) em um mes-
@@ -128,8 +137,13 @@ def plot_solution(
         plt.show()
     plt.close()
 
-def plot_punctual_source(output_dic: Dict, delta_t: float, test_name: str = 'c',
-                         path: str = os.getcwd(), save: bool = True) -> None:
+def plot_punctual_source(
+            output_dic: Dict, 
+            delta_t: float, 
+            test_name: str='c',
+            path: str=os.getcwd(), 
+            save: bool=True
+            ) -> None:
     '''
     funcao que plota a evolucao das intensidades das fontes conforme e`
     aumentado o valor de N
@@ -179,8 +193,13 @@ def plot_punctual_source(output_dic: Dict, delta_t: float, test_name: str = 'c',
         plt.show()
     plt.close()
     
-def plot_quadratic_error(output_dic: Dict, eps = float, test_name: str = 'c',
-                         path: str = os.getcwd(), save: bool = True) -> None:
+def plot_quadratic_error(
+            output_dic: Dict, 
+            eps = float, 
+            test_name: str = 'c',
+            path: str = os.getcwd(), 
+            save: bool = True,
+            ) -> None:
     '''
     funcao que plota os valores de E_2 (erro quadratico) para cada N em
     determinado teste
@@ -215,8 +234,10 @@ def plot_quadratic_error(output_dic: Dict, eps = float, test_name: str = 'c',
     ax.spines['right'].set_visible(False)
 
     title_string = r'Valor do erro quadrático em função de $N$'
-    subtitle_string = r'Teste ${}$, $T=1$, $\epsilon = {}$'.format(test_name, str(eps))
-
+    if test_name == 'c':
+        subtitle_string = r'Teste ${}$, $T=1$'.format(test_name)
+    elif test_name == 'd':
+        subtitle_string = r'Teste ${}$, $T=1$, $\epsilon = {}$'.format(test_name, str(eps))
     plt.suptitle(title_string, y=1.0, fontsize = 18)
     ax.set_title(subtitle_string, fontsize = 14)
     ax.set_xlabel(r'$N$')
@@ -304,7 +325,8 @@ def perform_ldlt_transformation_sparse(
             ) -> Tuple[np.ndarray, np.ndarray]:
     '''
     funcao que aplica a decomposicao de uma matriz tridiagonal simetrica
-    na multiplicacao de 3 outras, de forma que A = L.D.L'
+    na multiplicacao de 3 outras, de forma que A = L.D.L', usada exclu-
+    sivamente para a aplicacao do metodo de Crank-Nicolson
     @parameters:
     - a: array unidimensional generica que representa os valores da 
          diagonal principal
@@ -327,7 +349,10 @@ def perform_ldlt_transformation_sparse(
         d[i+1] = a[i+1] - b[i+1]*l[i+1]
     return d, l
 
-def solve_linear_system_sparse(A: np.ndarray, u: np.ndarray) -> np.ndarray:
+def solve_linear_system_sparse(
+            A: np.ndarray, 
+            u: np.ndarray
+            ) -> np.ndarray:
     '''
     funcao que resolve um sistema linear da forma Ax = u para A matriz
     trigonal simétrica esparsa, retornando o vetor x
@@ -391,7 +416,8 @@ def perform_ldlt_transformation(
 def solve_linear_system(A: np.ndarray, u: np.ndarray) -> np.ndarray:
     '''
     funcao que resolve o sistema linear do tipo Ax = u para uma matriz
-    simetrica nao-esparsa, retornando o vetor x
+    simetrica nao-esparsa, retornando o vetor x, usado exclusivamente 
+    na resolucao do metodo de Crank-Nicolson
     @parameters:
     - A: dim = (nf x nf), matriz quadrada do sistema normal
     - u: dim = (nf x 1), matriz de resultados do sistema normal
@@ -488,26 +514,39 @@ def crank_nicolson(
         f_array_atual = f(space_array, k, T, M, p)
         f_mean = (dt/2)*(f_array_anterior + f_array_atual)
         f_array_anterior = f_array_atual
-        upper_element = np.array([
-                                    (1 - N)*u[1] +
-                                    (N/2)*u[2] +
-                                    f_mean[1]
-                                ])
-        mid_elements = np.asarray([
-                                    (1 - N)*u[2:N-1] +
-                                    (N/2) * (u[1:N-2] + u[3:N]) +
-                                    f_mean[2:N-1]
-                                ]).ravel()
-        lower_element = np.array([
-                                    (1 - N)*u[N-1] +
-                                    (N/2)*u[N-2] +
-                                    f_mean[N-1]
-                                ])
+
+        upper_element = np.array(
+            [
+                (1 - N)*u[1] 
+                + (N/2)*u[2]
+                +  f_mean[1]
+            ]
+        )
+
+        mid_elements = np.asarray(
+            [
+                (1 - N)*u[2:N-1]
+                + (N/2) * (u[1:N-2] + u[3:N])
+                + f_mean[2:N-1]
+            ]
+        ).ravel()
+
+        lower_element = np.array(
+            [
+                (1 - N)*u[N-1]
+                + (N/2)*u[N-2] 
+                + f_mean[N-1]
+            ]
+        )
         linsys_asw = np.concatenate((upper_element, mid_elements, lower_element))
         u[1:N] = solve_linear_system_sparse(A, linsys_asw)
     return u
 
-def get_u_p(N: int, T: int, p: float) -> np.ndarray:
+def get_u_p(
+            N: int, 
+            T: int, 
+            p: float,
+            ) -> np.ndarray:
     '''
     funcao que calcula a matriz de temperaturas u_p para uma fonte pon-
     tual em x = p utilizando o metodo de crank-nicolson, retornando 
@@ -529,7 +568,11 @@ def get_u_p(N: int, T: int, p: float) -> np.ndarray:
     
     return u
 
-def generate_unf_vectors(N: int, T: int, p_list: list) -> list:
+def generate_unf_vectors(
+            N: int, 
+            T: int, 
+            p_list: list,
+            ) -> list:
     '''
     funcao que gera uma lista de vetores u_1,...,u_nf referentes as 
     temperaturas causadas pelas forcantes p_1,..., p_nf em T = 1
@@ -612,7 +655,11 @@ def calculate_quadratic_error(
     return E_2
 
 
-def run_test(test_name: str, N: int, eps: float = 1e-2) -> Union[np.ndarray, Tuple[Dict, float]]:
+def run_test(
+            test_name: str, 
+            N: int, 
+            eps: float = 1e-2
+            ) -> Union[np.ndarray, Tuple[Dict, float]]:
     '''
     funcao auxiliar que roda os testes
     @parameters:
@@ -640,9 +687,13 @@ def run_test(test_name: str, N: int, eps: float = 1e-2) -> Union[np.ndarray, Tup
 
     def test_b(N: int, T: float, p_list: list) -> np.ndarray:
         u_vectors = generate_unf_vectors(N,  T, p_list)
-        u_T = 2.3*u_vectors[0] + 3.7*u_vectors[1] \
-              + 0.3*u_vectors[2] + 4.2*u_vectors[3]
-
+        u_T = (
+            2.3*u_vectors[0] 
+            + 3.7*u_vectors[1]
+            + 0.3*u_vectors[2] 
+            + 4.2*u_vectors[3]
+        )
+        
         A, b = create_normal_system(u_vectors, u_T)
         x = solve_linear_system(A, b)
 
@@ -667,7 +718,7 @@ def run_test(test_name: str, N: int, eps: float = 1e-2) -> Union[np.ndarray, Tup
             for i in range(len(x)):
                 print(f"     a{i+1} = {x[i]}")
             E_2 = calculate_quadratic_error(N, u_T, x, u_vectors)
-            print(f"     E_2 = {E_2}")
+            print(f"\n     E_2 = {E_2}")
             output_dict[str(N)] = [x, E_2, u_T, u_vectors]
         delta_t = time.time() - start
         return output_dict, delta_t
@@ -701,7 +752,7 @@ def run_test(test_name: str, N: int, eps: float = 1e-2) -> Union[np.ndarray, Tup
             for i in range(len(x)):
                 print(f"     a{i+1} = {x[i]}")
             E_2 = calculate_quadratic_error(N, u_T, x, u_vectors)
-            print(f"     E_2 = {E_2}")
+            print(f"\n     E_2 = {E_2}")
             output_dict[str(N)] = [x, E_2, u_T, u_vectors]
         delta_t = time.time() - start
         return output_dict, delta_t

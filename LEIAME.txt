@@ -1,0 +1,30 @@
+>>EP2 Numérico
+>>Instruções de uso.
+>>Joao Rodrigo Windisch Olenscki
+>>Luca Rodrigues Miguel
+>>
+>>EXPLICAÇÃO GERAL
+>>
+>>O código foi estruturado em pequenas funções que executam cada qual pequenas
+>>tarefas. A principal função é a função main(), que require do usuário o tes-
+>>a ser rodado. As opções de input para esta etapa são 4: 'a', 'b', 'c' e 'd'
+>>para rodar os testes a, b, c e d, respectivamente, lembrando que nos casos
+>>'c' e 'd' é pedido também um valor de N, que deve ser um dos seguintes valo-
+>>res: 128, 256, 512, 1024 ou 2048. Existem ainda duas outras opções de teste
+>>cuja entrada é 'cN_list' ou 'dN_list' para rodar os testes c e d, respecti-
+>>vamente, para todos os valores de N
+>>
+>>EM QUE LINGUAGEM FOI ESCRITO O EP?
+>>
+>>Este EP foi escrito em Python.
+>>
+>>INSTRUÇÕES DE USO
+>>
+>>1. Rodar o código ep2.py;
+>>2. Escolher alguma das seguintes opções para os testes: 'a', 'b', 'c', 'd',
+>>   'cN_list', 'dN_list';
+>>3. Para os testes 'c' e 'd' escolher também o valor de N;
+>>4. Os resultados para o(s) teste(s) requisitado(s) será(ão) impresso(s) na 
+>>   tela;
+>>5. Para rodar algum outro teste basta ou rodar o script novamente ou chamar
+>>   a função main() em nova linha.
